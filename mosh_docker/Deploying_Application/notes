@@ -1,0 +1,56 @@
+# Deployment options
+    1. single-host Deployment
+    2. multi-host/cluster Deployment
+          a. Docker Swarm
+          b. Kubernetes
+# single host deployment is the easiest way to get started
+Using VPS option
+1. Digital Ocean
+2. Linode
+3. Google Cloud
+4. AWS
+5. Azure
+
+# We will Digital Ocean for deployment
+1. Installing docker machine on your PC
+    https://github.com/docker/machine/releases
+    docker-machine --version
+
+2. Provisioning a Host on digital ocean using the docker-machine
+    from your docker-machine on your PC
+    docker-machine create \
+    --driver digitalocean \
+    --digitalocean-access-token <created token from didgital Ocean account> \
+    # --digitalocean-access-token $DOTOKEN \
+    --engine-install-url "https://releases.rancher.com/install-docker.19.03.9.sh" \
+    vidly
+
+3. Connecting to the Host (Digital Ocean)
+    docker-machine ls
+    docker-machine ssh vidly # this will take you to the container
+
+4. Defining production Configuration
+    create docker-compose file
+
+5. Reducing the image size
+    docker build -t vidly_web_opt -f Dockerfile.prod .   # from the frontend directory since you created a new dockerfile
+    docker images
+        # you will see a drastic reduction in the size of the image
+        # Now update the docker-compose file with the new Dockerfile.prod
+    docker-compose -f docker-compose.prod.yml build
+
+6. Deploying the Application
+    docker-machine ls
+    docker-machine env vidly
+    eval $(docker-machine env vidly) 
+    # Any command we issue now will be sent to the vidly machine in Digital ocean
+    docker images
+    docker-compose -f docker-compose.prod.yml up -d
+    
+7. Publishing Changes
+
+
+
+    
+
+

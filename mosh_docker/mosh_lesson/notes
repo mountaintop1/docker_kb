@@ -1,0 +1,132 @@
+Dockerfile is used to buid an image for the application. The image is based on the official node image and contains the application code and its dependencies.
+To run the dockerfile we need to build the image. To build the image we need to run the following command:
+docker build -t <image_name> .
+docker images 
+docker image ls
+To run a docker container use 
+    docker run <images-name>
+
+From docker hub search ubuntu image. instead of using docker pull. I will use
+    docker run -it ubuntu
+# Problem
+while in a container when you try to install package you see the error 
+unable to locate package .....
+    apt list
+# Solution    
+apt update
+apt list # you will see more packages
+apt install nano 
+
+# linux command
+more, less, tree, tail, cat, >, >>, cat file1 file2 > combine
+ls /etc -l > redirect.txt
+# searching 
+grep hello file.txt  # case sentive
+grep -i hello file.txt # case insentive
+grep -i hello file*
+grep -i -r hello .  # search the directory
+grep -ir hello .
+
+find -type f -name "f*" # case sentive
+find -type f -name "F*"
+find -type f -iname "f*" # case insentive
+
+find -type d
+find / -type f -name "*.py" > python-files.txt
+
+# chaining commands
+# and
+mkdir test ; cd test ; echo done  # if there is an error in one command other command will contiune
+mkdir test && cd test && echo done # if there is any error in one it will stop the other command
+# or
+mkdir test || echo done
+# pipe
+ls /bin | less
+ls /bin | head
+
+# Break Up a long command \
+mkdir hello;\
+cd hello;\
+echo done
+
+# Enviroment variables
+printenv
+printenv PATH
+echo $PATH
+export DB_USER=ola
+echo $DB_USER
+printenv $DB_USER 
+
+# To make environment variable persistent # please dnt store sentive info in enviroment vairiable
+cd ~
+goto .bashrc # to write all your environment variable
+or better use echo command to write to the .bashrc
+echo $DB_USER=ola >> .bashrc 
+echo $DB_USER
+    To effect the change without closing the terminal
+    source .bashrc
+    source ~/.bashrc
+
+# Processes
+kill 38 # 38 is the process id
+
+# Managing User
+useradd -m john
+cat /etc/passwd
+ 
+ usermod -s /bin/bash
+ cat /etc/passwd
+
+ cat /etc/shadow # this is where password is located
+
+to login to a container as a user and not root
+
+docker exec -it -u john target1 bash
+/$:
+
+userdel john # to delete
+adduser # is more interactive so when using docker we dnt want to use this 
+
+# Managing Groups
+groupadd developers
+cat /etc/group
+usermod -G developers john
+cat /etc/passwd | grep john
+grep john /etc/passwd
+
+addgroup app
+adduser -S -G app app
+groups app
+
+addgroup ola && adduser -S -G ola ola
+groups ola
+
+groups john
+
+# File Permissions
+cd ~
+echo "echo hello" > deploy.sh
+cat deploy.sh
+ls -l
+chmod u+x deploy.sh
+chmod o+x deploy.sh
+chmod og+x+w+r deploy.sh
+
+# Docker
+To dockerise an application you need to add a dockerfile to it
+    FROM for specifying bas image
+    WORKDIR 
+    COPY
+    ADD
+    RUN execute OS command
+    ENV
+    EXPOSE
+    USER
+    CMD
+    ENTRYPOINT
+
+
+
+
+
+

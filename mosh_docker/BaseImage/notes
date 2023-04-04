@@ -1,0 +1,80 @@
+docker build -t react-app .
+docker images
+docker run -it react-app sh # the image does not have bash so we use shell
+
+# Copy files and directory
+
+docker history mmumshad/ubuntu-ssh-enabled
+
+# Removing Images
+docker image prune
+docker container prune
+
+docker image rm <image-name>
+
+# Tags
+docker build -t react-app:1 .
+docker image tag react-app:latest react-app:1
+
+# Sharing Images
+docker images tag b06 oadegoke11/react-app:2
+docker login
+docker push oadegoke11/react-app:2
+
+# Saving and loading images
+docker images save -o react-app.tar react-app:3
+docker images load -i react-app.tar
+
+# Logs
+docker logs target1
+
+# Publishing Ports
+docker run -d -p 3000:3000 --name c1 target1
+
+# Execute Command in running container/ starting & stopping container
+docker exec c1 ls
+docker exec -it c1 sh
+docker start c1 # starts an existing or stopped container while run start a new container
+# Remove container
+docker container rm c1
+docker rm c1
+docker ps -a | grep c1
+docker container prune # get rid of all stopped container 
+
+# Persisting Data Using Volumes/ Container File Systems
+docker exec -it target1 sh
+echo data > data.txt
+
+# Volumes is a storage outside of the container
+docker volume create app-data ##  to creat a volume
+docker volume inspect app-data
+docker run -d -p 4000:3000 -v app-data:/app/data react-app 
+# you dnt have to explicitly create this volume before you run docker bcos docker will create it if not created
+docker exec -it c1 sh
+cd data
+echo data > data.txt
+ error with permission denied
+app user doesnt have the right permission
+goto the dockerfile in the directory and make app user create the volume
+
+docker run -d -p 5000:3000 -v app-data:/app/data react-app # this time data directory will be created by the image build using app user
+docker exec -it c1 sh
+
+# Coping Files between Host and Container
+# container to host
+docker cp c1:/app/log.txt .
+
+# Host to container
+docker cp secret.txt c1:/app
+
+# sharing source code with container
+Publishing changes
+    1. for production: build a new images
+    2. For development
+        a. dnt build a new image anytime you make a tiny changes. it is time consuming
+        b. dnt copy files. it is pain in the butt too
+        c. Create a mapping/binding between the directory on the host and a directory on the container
+
+docker run -d -p 5001:3000 -v $(pwd):/app react-app
+docker logs -f c1
+
